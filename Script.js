@@ -26,9 +26,11 @@ const gameBoard = (() => {
     let winner = "";
 
     const buildBoard = (size) => {
+        let boxList = [];
         board.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
         for(let i = 0; i < size**2; i++) {
             const box = new Box(document.createElement('div'), false);
+            boxList[i] = box;
             box.element.classList.add('box'); 
             box.element.style.width = `${32/size} vw`
             box.element.style.height = `${32/size} vw`
@@ -43,7 +45,7 @@ const gameBoard = (() => {
                     gameState[i] = currPlayer.getSymbol();
 
                     checkWin();
-                    checkTie();
+                    checkTie(boxList);
                     if(win == false && tie == false) {
                         if(currPlayer == player1) {
                             currPlayer = player2;
@@ -89,9 +91,8 @@ const gameBoard = (() => {
         } 
     };
 
-    const checkTie = () => {
-        let boxList = Array.from(document.querySelectorAll('.box'));
-        let numClicked = 0
+    const checkTie = (boxList) => {
+        let numClicked = 0;
         boxList.forEach(element => {
             if(element.beenClicked == true) {
                 numClicked++;
